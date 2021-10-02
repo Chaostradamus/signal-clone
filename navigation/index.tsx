@@ -12,8 +12,15 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
-
+import {
+  ColorSchemeName,
+  Image,
+  Pressable,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
+import { Feather } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
@@ -29,6 +36,8 @@ import {
 import LinkingConfiguration from "./LinkingConfiguration";
 
 import ChatRoomScreen from "../screens/ChatRoomScreen";
+
+import HomeScreen from "../screens/HomeScreen";
 
 export default function Navigation({
   colorScheme,
@@ -55,15 +64,19 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="ChatRoom"
-        component={ChatRoomScreen}
-        options={{ headerShown: true }}
+        name="Home"
+        component={HomeScreen}
+        options={{ headerTitle: HomeHeader }}
       />
       <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
+        name="ChatRoom"
+        component={ChatRoomScreen}
+        options={{
+          headerTitle: ChatRoomHeader,
+          headerBackTitleVisible: false,
+        }}
       />
+
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}
@@ -136,3 +149,96 @@ function TabBarIcon(props: {
 }) {
   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }
+
+const HomeHeader = (props) => {
+  const { width } = useWindowDimensions();
+
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width,
+        padding: 10,
+        alignItems: "center",
+      }}
+    >
+      <Image
+        source={{
+          uri: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/4.jpg",
+        }}
+        style={{ width: 30, height: 30, borderRadius: 30 }}
+      />
+      <Text
+        style={{
+          flex: 1,
+          textAlign: "center",
+          marginLeft: 50,
+          fontWeight: "bold",
+        }}
+      >
+        Signal
+      </Text>
+
+      <Feather
+        name="camera"
+        size={24}
+        color="black"
+        style={{ marginHorizontal: 10 }}
+      />
+      <Feather
+        name="edit-2"
+        size={24}
+        color="black"
+        style={{ marginHorizontal: 10 }}
+      />
+    </View>
+  );
+};
+
+const ChatRoomHeader = (props) => {
+  const { width } = useWindowDimensions();
+
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: width - 25,
+        marginLeft: 25,
+        padding: 10,
+        alignItems: "center",
+      }}
+    >
+      <Image
+        source={{
+          uri: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/4.jpg",
+        }}
+        style={{ width: 30, height: 30, borderRadius: 30 }}
+      />
+      <Text
+        style={{
+          flex: 1,
+
+          marginLeft: 50,
+          fontWeight: "bold",
+        }}
+      >
+        {props.children}
+      </Text>
+
+      <Feather
+        name="camera"
+        size={24}
+        color="black"
+        style={{ marginHorizontal: 10 }}
+      />
+      <Feather
+        name="edit-2"
+        size={24}
+        color="black"
+        style={{ marginHorizontal: 10 }}
+      />
+    </View>
+  );
+};
